@@ -21,10 +21,6 @@ The game was designed to improve learning through interactive and enjoyable meth
 - 💻 GUI-based educational game
 - 📚 Interactive science learning approach
 
-<p align="center">
-  <img src="https://media.giphy.com/media/L8K62iTDkzGX6/giphy.gif" width="450"/>
-</p>
-
 ---
 
 ## 🛠️ Technologies Used
@@ -60,7 +56,7 @@ BioLadder/
 * More biology question categories
 * Multiplayer mode
 * Timer-based scoring system
-* Improved GUI and animations
+* Improved GUI and gameplay experience
 
 ---
 
@@ -74,4 +70,5 @@ BioLadder/
 
 **Varsha Shanmugam**
 
-
+```
+```
