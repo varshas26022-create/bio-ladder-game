@@ -1,0 +1,218 @@
+# BioLadder - Python Tkinter Educational Snake & Ladder Game
+
+Save this file as:
+
+```bash
+bioladder.py
+```
+
+Then run using:
+
+```bash
+python bioladder.py
+```
+
+---
+
+```python
+import tkinter as tk
+from tkinter import messagebox
+import random
+
+# -----------------------------
+# Main Window
+# -----------------------------
+root = tk.Tk()
+root.title("BioLadder - Educational Snake & Ladder")
+root.geometry("850x750")
+root.configure(bg="#0B1026")
+
+# -----------------------------
+# Board Setup
+# -----------------------------
+canvas = tk.Canvas(root, width=600, height=600, bg="white")
+canvas.pack(pady=20)
+
+cell_size = 60
+positions = {}
+
+# Create Board
+num = 1
+for row in range(9, -1, -1):
+    cols = range(10) if (9 - row) % 2 == 0 else range(9, -1, -1)
+
+    for col in cols:
+        x1 = col * cell_size
+        y1 = row * cell_size
+        x2 = x1 + cell_size
+        y2 = y1 + cell_size
+
+        color = "#D6EAF8" if (row + col) % 2 == 0 else "#AED6F1"
+
+        canvas.create_rectangle(x1, y1, x2, y2, fill=color)
+        canvas.create_text(x1 + 30, y1 + 30, text=str(num), font=("Arial", 12, "bold"))
+
+        positions[num] = (x1 + 30, y1 + 30)
+        num += 1
+
+# -----------------------------
+# Snakes and Ladders
+# -----------------------------
+ladders = {
+    3: 22,
+    8: 26,
+    20: 38,
+    41: 59,
+    50: 72,
+    63: 81
+}
+
+snakes = {
+    17: 4,
+    52: 29,
+    57: 40,
+    88: 67,
+    95: 74,
+    99: 78
+}
+
+# -----------------------------
+# Biology Questions
+# -----------------------------
+questions = {
+    5: ("What is the powerhouse of the cell?", "mitochondria"),
+    12: ("Which organ pumps blood?", "heart"),
+    27: ("What carries oxygen in blood?", "hemoglobin"),
+    36: ("Largest organ in human body?", "skin"),
+    44: ("Basic unit of life?", "cell"),
+    61: ("Which vitamin is produced from sunlight?", "vitamin d"),
+    73: ("Organ responsible for filtration of blood?", "kidney"),
+    84: ("Which blood group is universal donor?", "o negative")
+}
+
+# -----------------------------
+# Player
+# -----------------------------
+player_position = 1
+x, y = positions[player_position]
+player = canvas.create_oval(x - 15, y - 15, x + 15, y + 15, fill="red")
+
+# -----------------------------
+# Status Label
+# -----------------------------
+status = tk.Label(root, text="Click Roll Dice to Start", font=("Arial", 14, "bold"), bg="#0B1026", fg="white")
+status.pack(pady=10)
+
+# -----------------------------
+# Ask Question Function
+# -----------------------------
+def ask_question(position):
+    if position in questions:
+        question, answer = questions[position]
+
+        popup = tk.Toplevel(root)
+        popup.title("Biology Question")
+        popup.geometry("400x200")
+        popup.configure(bg="#162561")
+
+        tk.Label(
+            popup,
+            text=question,
+            font=("Arial", 12, "bold"),
+            bg="#162561",
+            fg="white",
+            wraplength=350
+        ).pack(pady=20)
+
+        entry = tk.Entry(popup, font=("Arial", 12))
+        entry.pack(pady=10)
+
+        def submit_answer():
+            user_answer = entry.get().strip().lower()
+
+            if user_answer == answer:
+                messagebox.showinfo("Correct", "Correct Answer! 🎉")
+            else:
+                messagebox.showerror("Wrong", f"Correct Answer: {answer}")
+
+            popup.destroy()
+
+        tk.Button(
+            popup,
+            text="Submit",
+            command=submit_answer,
+            bg="#6FA8FF",
+            fg="black",
+            font=("Arial", 11, "bold")
+        ).pack(pady=10)
+
+# -----------------------------
+# Roll Dice Function
+# -----------------------------
+def roll_dice():
+    global player_position
+
+    dice = random.randint(1, 6)
+    status.config(text=f"You rolled: {dice}")
+
+    new_position = player_position + dice
+
+    if new_position > 100:
+        return
+
+    player_position = new_position
+
+    # Ladder
+    if player_position in ladders:
+        messagebox.showinfo("Ladder", "You climbed a ladder! 🚀")
+        player_position = ladders[player_position]
+
+    # Snake
+    elif player_position in snakes:
+        messagebox.showwarning("Snake", "Oops! Snake bite 🐍")
+        player_position = snakes[player_position]
+
+    # Move Player
+    x, y = positions[player_position]
+    canvas.coords(player, x - 15, y - 15, x + 15, y + 15)
+
+    # Ask Question
+    ask_question(player_position)
+
+    # Win Condition
+    if player_position == 100:
+        messagebox.showinfo("Winner", "Congratulations! You Won 🎉")
+
+# -----------------------------
+# Roll Dice Button
+# -----------------------------
+roll_button = tk.Button(
+    root,
+    text="🎲 Roll Dice",
+    command=roll_dice,
+    font=("Arial", 14, "bold"),
+    bg="#6FA8FF",
+    fg="black",
+    padx=20,
+    pady=10
+)
+
+roll_button.pack(pady=20)
+
+# -----------------------------
+# Run App
+# -----------------------------
+root.mainloop()
+```
+
+---
+
+## Features Included
+
+* Snake & Ladder board
+* Dice rolling system
+* Biology quiz questions
+* Snake and ladder mechanics
+* GUI using Tkinter
+* Win detection
+* Educational gameplay
